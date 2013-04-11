@@ -12,10 +12,17 @@ namespace Sudoku.Source.Screens
     public partial class MainForm : Form
     {
         private static MainForm _instance;
+        private Game.SudokuGrid sudokuGrid;
+
 
         public MainForm()
         {
             InitializeComponent();
+            this.sudokuGrid = new Sudoku.Source.Game.SudokuGrid();
+            this.sudokuGrid.Location = new System.Drawing.Point(0, 30);
+            this.sudokuGrid.Name = "sudokuGrid";
+            this.sudokuGrid.TabIndex = 0;
+            this.Controls.Add(this.sudokuGrid);
         }
 
         public static MainForm GetInstance()

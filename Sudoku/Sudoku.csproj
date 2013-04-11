@@ -36,6 +36,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\Microsoft.Solver.Foundation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,8 +50,21 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Game\SudokuGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Game\SudokuGrid.Designer.cs">
+      <DependentUpon>SudokuGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Game\SudokuSquare.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Game\SudokuSquare.Designer.cs">
+      <DependentUpon>SudokuSquare.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Screens\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +88,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Source\Game\SudokuGrid.resx">
+      <DependentUpon>SudokuGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Game\SudokuSquare.resx">
+      <DependentUpon>SudokuSquare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Screens\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -84,7 +110,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
