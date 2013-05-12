@@ -74,5 +74,15 @@ namespace Sudoku.Source.Game
             this.startSquarePositionX += (this.Row / 3) * Constants.SpaceBetweenRegions;
             this.startSquarePositionY += (this.Column / 3) * Constants.SpaceBetweenRegions;
         }
+
+        private void mainRectangle_Click(object sender, EventArgs e)
+        {
+            this.SudokuTextBox.Focus();
+        }
+
+        private void centerRectangle_Click(object sender, EventArgs e)
+        {
+            this.SudokuTextBox.Focus();
+        }
     }
 }
