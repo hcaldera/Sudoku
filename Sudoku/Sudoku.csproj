@@ -79,6 +79,9 @@
     <Compile Include="Source\Game\SudokuProblem.cs" />
     <Compile Include="Source\Main\Constants.cs" />
     <Compile Include="Source\Main\Utils.cs" />
+    <Compile Include="Source\Solver\GeneticAlgorithm.cs" />
+    <Compile Include="Source\Solver\Genome.cs" />
+    <Compile Include="Source\Solver\GenomeComparer.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -110,6 +113,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
