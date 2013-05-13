@@ -4,21 +4,24 @@ using Microsoft.SolverFoundation.Services;
 
 namespace Sudoku.Source.Game
 {
-    public static class SudokuProblem
+    internal static class SudokuProblem
     {
-        private static List<int> problem = new List<int>();
-        private static List<int> solution = new List<int>();
+        private static List<int> _problem = new List<int>();
+        private static List<int> _solution = new List<int>();
         private static int hints = 50;
 
-        public static bool IsSolved(List<int> possibleSolution)
+        internal static List<int> Problem { get { return SudokuProblem._problem; } }
+        internal static List<int> Solution { get { return SudokuProblem._solution; } }
+
+        internal static bool IsSolved(List<int> possibleSolution)
         {
-            if (possibleSolution == null)
+            if ((possibleSolution == null) || possibleSolution.Contains(Constants.PlaceHolder))
             {
                 return false;
             }
             for (int i = 0; i < possibleSolution.Count; i++)
             {
-                if (possibleSolution[i] != SudokuProblem.solution[i])
+                if (possibleSolution[i] != SudokuProblem._solution[i])
                 {
                     return false;
                 }
@@ -26,7 +29,7 @@ namespace Sudoku.Source.Game
             return true;
         }
 
-        public static void GenerateSudoku()
+        internal static void GenerateSudoku()
         {
             SolverContext context = SolverContext.GetContext();
             Model model = context.CreateModel();
@@ -52,23 +55,13 @@ namespace Sudoku.Source.Game
             }
 
             context.Solve(new ConstraintProgrammingDirective());
-            SudokuProblem.solution = SudokuProblem.ConvertDecisionsToIntegers(decisionList);
+            SudokuProblem._solution = SudokuProblem.ConvertDecisionsToIntegers(decisionList);
         }
 
-        public static void GenerateProblem()
+        internal static void GenerateProblem()
         {
             SudokuProblem.GenerateSudoku();
             SudokuProblem.hideNumbers();
-        }
-
-        public static List<int> GetSolution()
-        {
-            return SudokuProblem.solution;
-        }
-
-        public static List<int> GetProblem()
-        {
-            return SudokuProblem.problem;
         }
 
         private static List<int> ConvertDecisionsToIntegers(List<Decision> decisionList)
@@ -96,11 +89,11 @@ namespace Sudoku.Source.Game
         private static void hideNumbers()
         {
             List<int> toHide = Utils.GetUniqueRandomNumbers(0, Constants.BoardSize, Constants.BoardSize - SudokuProblem.hints);
-            SudokuProblem.problem = new List<int>();
-            SudokuProblem.problem.AddRange(SudokuProblem.solution);
+            SudokuProblem._problem = new List<int>();
+            SudokuProblem._problem.AddRange(SudokuProblem._solution);
             foreach (int hideMe in toHide)
             {
-                SudokuProblem.problem[hideMe] = Constants.PlaceHolder;
+                SudokuProblem._problem[hideMe] = Constants.PlaceHolder;
             }
         }
     }

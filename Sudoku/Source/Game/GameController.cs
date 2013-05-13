@@ -3,32 +3,32 @@ using System.Windows.Forms;
 
 namespace Sudoku.Source.Game
 {
-    public static class GameController
+    internal static class GameController
     {
-        public static void GenerateNewGame()
+        internal static void GenerateNewGame()
         {
             SudokuProblem.GenerateProblem();
         }
 
-        public static List<int> GetSudokuSolution()
+        internal static List<int> GetSudokuSolution()
         {
-            if (SudokuProblem.GetSolution().Count == 0)
+            if (SudokuProblem.Solution.Count == 0)
             {
                 SudokuProblem.GenerateProblem();
             }
-            return SudokuProblem.GetSolution();
+            return SudokuProblem.Solution;
         }
 
-        public static List<int> GetSudokuProblem()
+        internal static List<int> GetSudokuProblem()
         {
-            if (SudokuProblem.GetProblem().Count == 0)
+            if (SudokuProblem.Problem.Count == 0)
             {
                 SudokuProblem.GenerateProblem();
             }
-            return SudokuProblem.GetProblem();
+            return SudokuProblem.Problem;
         }
 
-        public static void IsSudokuSolved(List<int> solution)
+        internal static void IsSudokuSolved(List<int> solution)
         {
             if (solution == null)
             {

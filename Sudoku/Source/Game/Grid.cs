@@ -6,27 +6,24 @@ using Sudoku;
 
 namespace Sudoku.Source.Game
 {
-    public static class Grid
+    internal static class Grid
     {
         private static readonly List<int> Squares = new List<int>(Constants.BoardSize);
 
         static Grid()
         {
-            if (Grid.Squares.Count == 0)
+            for (int i = 0; i < Constants.BoardSize; i++)
             {
-                for (int i = 0; i < Constants.BoardSize; i++)
-                {
-                    Grid.Squares.Add(i);
-                }
+                Grid.Squares.Add(i);
             }
         }
 
-        public static List<int> GetAllSquares()
+        internal static List<int> GetAllSquares()
         {
             return Grid.Squares;
         }
 
-        public static List<int> GetRow(int rowNumber)
+        internal static List<int> GetRow(int rowNumber)
         {
             List<int> row = new List<int>(9);
             for (int i = 0; i < 9; i++)
@@ -36,7 +33,7 @@ namespace Sudoku.Source.Game
             return row;
         }
 
-        public static List<int> GetColumn(int columnNumber)
+        internal static List<int> GetColumn(int columnNumber)
         {
             List<int> column = new List<int>(9);
             for (int i = 0; i < 9; i++)
@@ -46,7 +43,7 @@ namespace Sudoku.Source.Game
             return column;
         }
 
-        public static List<int> GetRegion(int regionNumber)
+        internal static List<int> GetRegion(int regionNumber)
         {
             List<int> region = new List<int>(9);
             int horizontalOffset = (regionNumber / 3) * 3;

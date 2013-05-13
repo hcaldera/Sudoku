@@ -2,7 +2,7 @@
 using Microsoft.SolverFoundation.Services;
 namespace Sudoku.Source.Game
 {
-    public static class DecisionFactory
+    internal static class DecisionFactory
     {
         private static readonly List<Decision> Decisions = new List<Decision>(9);
         private static Domain domain = Domain.IntegerRange(1, 9);
@@ -18,12 +18,12 @@ namespace Sudoku.Source.Game
             {
                 for (int i = 0; i < 81; i++)
                 {
-                    DecisionFactory.Decisions.Add(new Decision(domain, Constants.StringAffix + i));
+                    DecisionFactory.Decisions.Add(new Decision(DecisionFactory.domain, Constants.StringAffix + i));
                 }
             }
         }
 
-        public static List<Decision> BuildDecisions(List<int> squares)
+        internal static List<Decision> BuildDecisions(List<int> squares)
         {
             if (squares == null || squares.Count == 0)
             {

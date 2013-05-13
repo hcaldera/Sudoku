@@ -34,7 +34,7 @@ using System.Collections.Generic;
 
 namespace Sudoku.Source.Solver
 {
-    internal delegate double GAFunction(double[] values);
+    public delegate double GAFunction(double[] values);
 
     public class GeneticAlgorithm
     {
@@ -55,6 +55,8 @@ namespace Sudoku.Source.Solver
 
         public GAFunction FitnessFunction { get { return getFitness; } set { getFitness = value; } }
         public bool Elitism { get { return this._elitism; } set { this._elitism = value; } }
+
+        public double[] BestGenome { get { return this.currentGeneration[this.populationSize - 1].Genes; } }
 
         public GeneticAlgorithm()
         {

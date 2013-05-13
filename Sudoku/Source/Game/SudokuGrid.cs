@@ -26,6 +26,71 @@ namespace Sudoku.Source.Game
             this.drawSquare();
         }
 
+        public void SetPossibleSolution(List<int> values)
+        {
+            int index = 0;
+            for (int i = 0; i < this.problem.Count; i++)
+            {
+                if (problem[i] == Constants.PlaceHolder)
+                {
+                    this.sudokuSquares[i].SudokuTextBox.Text = values[index++].ToString();
+                }
+            }
+        }
+
+        public double GetAttemptFitness(List<int> values)
+        {
+            int totalRepeated;
+            List<int> indexes;
+            List<int> possibleValues = new List<int>(new int[9] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+            List<int> possibleValuesTemp;
+            int j = 0;
+            this.attempt = new List<int>();
+            for (int i = 0; i < this.problem.Count; i++)
+            {
+                if (problem[i] == Constants.PlaceHolder)
+                {
+                    this.attempt.Add(values[j++]);
+                }
+                else
+                {
+                    this.attempt.Add(this.problem[i]);
+                }
+            }
+
+            totalRepeated = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                // Rows.
+                indexes = new List<int>(Grid.GetRow(i));
+                possibleValuesTemp = new List<int>(possibleValues);
+                foreach (int index in indexes)
+                {
+                    possibleValuesTemp.Remove(attempt[index]);
+                }
+                totalRepeated += possibleValuesTemp.Count;
+                // Columns.
+                indexes = new List<int>(Grid.GetColumn(i));
+                possibleValuesTemp = new List<int>(possibleValues);
+                foreach (int index in indexes)
+                {
+                    possibleValuesTemp.Remove(attempt[index]);
+                }
+                totalRepeated += possibleValuesTemp.Count;
+                // Regions.
+                indexes = new List<int>(Grid.GetRegion(i));
+                possibleValuesTemp = new List<int>(possibleValues);
+                foreach (int index in indexes)
+                {
+                    possibleValuesTemp.Remove(attempt[index]);
+                }
+                totalRepeated += possibleValuesTemp.Count;
+            }
+
+            // Return fitness.
+            return 1 - totalRepeated / 243.00;
+        }
+
         private void getPossibleSolution()
         {
             this.attempt = new List<int>();
