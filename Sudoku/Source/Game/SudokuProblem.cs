@@ -8,10 +8,11 @@ namespace Sudoku.Source.Game
     {
         private static List<int> _problem = new List<int>();
         private static List<int> _solution = new List<int>();
-        private static int hints = 50;
+        private static int _hints;
 
         internal static List<int> Problem { get { return SudokuProblem._problem; } }
         internal static List<int> Solution { get { return SudokuProblem._solution; } }
+        internal static int Hints { get { return SudokuProblem._hints; } set { SudokuProblem._hints = value; } }
 
         internal static bool IsSolved(List<int> possibleSolution)
         {
@@ -88,7 +89,7 @@ namespace Sudoku.Source.Game
 
         private static void hideNumbers()
         {
-            List<int> toHide = Utils.GetUniqueRandomNumbers(0, Constants.BoardSize, Constants.BoardSize - SudokuProblem.hints);
+            List<int> toHide = Utils.GetUniqueRandomNumbers(0, Constants.BoardSize, Constants.BoardSize - SudokuProblem._hints);
             SudokuProblem._problem = new List<int>();
             SudokuProblem._problem.AddRange(SudokuProblem._solution);
             foreach (int hideMe in toHide)

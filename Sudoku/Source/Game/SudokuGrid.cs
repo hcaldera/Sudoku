@@ -18,6 +18,8 @@ namespace Sudoku.Source.Game
         private List<int> problem = new List<int>();
         private List<Point> positionList = new List<Point>();
 
+        public int Hints { get { return SudokuProblem.Hints; } set { SudokuProblem.Hints = value; } }
+
         public SudokuGrid()
         {
             InitializeComponent();
@@ -120,8 +122,11 @@ namespace Sudoku.Source.Game
 
         private void TextChange(object sender, EventArgs e)
         {
-            this.getPossibleSolution();
-            GameController.IsSudokuSolved(attempt);
+            if (!(sender as TextBox).Text.Equals(String.Empty))
+            {
+                this.getPossibleSolution();
+                GameController.IsSudokuSolved(attempt);
+            }
         }
     }
 }

@@ -25,7 +25,8 @@ namespace Sudoku.Source.Screens
             this.sudokuGrid.Name = "sudokuGrid";
             this.sudokuGrid.TabIndex = 0;
             this.Controls.Add(this.sudokuGrid);
-            gA = new GeneticAlgorithm(0.85, 0.05, 100, 200000, 41);
+            this.sudokuGrid.Hints = 15;
+            gA = new GeneticAlgorithm(0.90, 0.05, 21, 10000, 66);
             gA.FitnessFunction = this.getFitness;
             gA.Elitism = true;
         } 

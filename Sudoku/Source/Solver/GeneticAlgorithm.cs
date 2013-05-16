@@ -34,7 +34,8 @@ using System.Collections.Generic;
 
 namespace Sudoku.Source.Solver
 {
-    public delegate double GAFunction(double[] values);
+    public delegate double GAFitnessFunction(double[] values);
+    public delegate void GACrossoverFunction(double[] parent1, double[] parent2, double[] child1, double[] child2);
 
     public class GeneticAlgorithm
     {
@@ -50,10 +51,12 @@ namespace Sudoku.Source.Solver
         private List<Genome> nextGeneration;
         private List<double> fitnessTable;
 
-        private static Random random = new Random();
-        private static GAFunction getFitness;
+        private static Random random = new Random(DateTime.Now.Millisecond);
+        private static GAFitnessFunction getFitness;
+        private static GACrossoverFunction crossoverFunction;
 
-        public GAFunction FitnessFunction { get { return getFitness; } set { getFitness = value; } }
+        public GAFitnessFunction FitnessFunction { get { return getFitness; } set { getFitness = value; } }
+        public GACrossoverFunction CrossoverFunction { get { return crossoverFunction; } set { crossoverFunction = value; } }
         public bool Elitism { get { return this._elitism; } set { this._elitism = value; } }
 
         public double[] BestGenome { get { return this.currentGeneration[this.populationSize - 1].Genes; } }
@@ -93,6 +96,10 @@ namespace Sudoku.Source.Solver
             this.rankPopulation();
             for (int i = 0; i < this.generationSize; i++)
             {
+                if ((i % 1000) == 0)
+                {
+                    random = new Random(DateTime.Now.Millisecond);
+                }
                 this.createNextGeneration();
                 this.rankPopulation();
             }
@@ -127,7 +134,16 @@ namespace Sudoku.Source.Solver
                 pidx2 = this.rouletteSelection();
                 parent1 = this.currentGeneration[pidx1];
                 parent2 = this.currentGeneration[pidx2];
-                parent1.Crossover(parent2, out child1, out child2);
+                if (this.CrossoverFunction == null)
+                {
+                    parent1.Crossover(parent2, out child1, out child2);
+                }
+                else
+                {
+                    child1 = new Genome(this.genomeSize);
+                    child2 = new Genome(this.genomeSize);
+                    this.CrossoverFunction(parent1.Genes, parent2.Genes, child1.Genes, child2.Genes);
+                }
                 child1.Mutate();
                 child2.Mutate();
                 this.nextGeneration.Add(child1);
