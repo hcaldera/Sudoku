@@ -50,20 +50,37 @@ namespace Sudoku.Source.Solver
         public void Crossover(Genome genome2, out Genome child1, out Genome child2)
         {
             int  pos;
-            pos = Genome.random.NextDouble() < Genome._crossoverRate ? Genome.random.Next(this._length) : this._length;
+            double rndPos = Genome.random.NextDouble();
+
             child1 = new Genome(this._length, false);
             child2 = new Genome(this._length, false);
-            for (int i = 0; i < this._length; i++)
+
+            if (GeneticAlgorithm.crossoverFunction == null)
             {
-                if (i < pos)
+                pos = rndPos < Genome._crossoverRate ? Genome.random.Next(this._length) : this._length;
+                for (int i = 0; i < this._length; i++)
                 {
-                    child1.Genes[i] = this.Genes[i];
-                    child2.Genes[i] = genome2.Genes[i];
+                    if (i < pos)
+                    {
+                        child1.Genes[i] = this.Genes[i];
+                        child2.Genes[i] = genome2.Genes[i];
+                    }
+                    else
+                    {
+                        child1.Genes[i] = genome2.Genes[i];
+                        child2.Genes[i] = this.Genes[i];
+                    }
+                }
+            }
+            else
+            {
+                if (rndPos < Genome._crossoverRate)
+                {
+                    GeneticAlgorithm.crossoverFunction(this._genes, genome2._genes, child1._genes, child2._genes, 0.5);
                 }
                 else
                 {
-                    child1.Genes[i] = genome2.Genes[i];
-                    child2.Genes[i] = this.Genes[i];
+                    GeneticAlgorithm.crossoverFunction(this._genes, genome2._genes, child1._genes, child2._genes, 0.99);
                 }
             }
         }

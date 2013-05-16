@@ -1,6 +1,6 @@
 ﻿namespace Sudoku.Source.Game
 {
-    partial class SudokuSquare
+    internal partial class SudokuSquare
     {
         /// <summary> 
         /// Required designer variable.
@@ -102,7 +102,7 @@
 
         private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
         private Microsoft.VisualBasic.PowerPacks.RectangleShape mainRectangle;
-        public System.Windows.Forms.TextBox SudokuTextBox;
+        internal System.Windows.Forms.TextBox SudokuTextBox;
         private Microsoft.VisualBasic.PowerPacks.RectangleShape centerRectangle;
     }
 }

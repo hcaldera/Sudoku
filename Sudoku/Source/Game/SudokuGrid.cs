@@ -17,15 +17,55 @@ namespace Sudoku.Source.Game
         private List<int> attempt = new List<int>();
         private List<int> problem = new List<int>();
         private List<Point> positionList = new List<Point>();
+        private bool squaresDrawed;
 
         public int Hints { get { return SudokuProblem.Hints; } set { SudokuProblem.Hints = value; } }
 
         public SudokuGrid()
         {
             InitializeComponent();
+            this.squaresDrawed = false;
+        }
+
+        public void GenerateSudoku(int hints)
+        {
+            this.Hints = hints;
+            GameController.GenerateNewGame();
             this.solution = GameController.GetSudokuSolution();
             this.problem = GameController.GetSudokuProblem();
-            this.drawSquare();
+            if (!squaresDrawed)
+            {
+                this.drawSquares();
+            }
+            else
+            {
+                for (int i = 0; i < this.problem.Count; i++)
+                {
+                    this.sudokuSquares[i].ChangeSquare(this.problem[i], this.solution[i]);
+                }
+            }
+        }
+
+        public void GenerateSudoku(List<int> newProblem, List<int> newSolution)
+        {
+            if (newProblem.Count == newSolution.Count)
+            {
+                this.problem = new List<int>(newProblem);
+                this.solution = new List<int>(newSolution);
+                SudokuProblem.Solution = new List<int>(newProblem);
+                SudokuProblem.Solution = new List<int>(newSolution);
+                if (!squaresDrawed)
+                {
+                    this.drawSquares();
+                }
+                else
+                {
+                    for (int i = 0; i < newProblem.Count; i++)
+                    {
+                        this.sudokuSquares[i].ChangeSquare(newProblem[i], newSolution[i]);
+                    }
+                }
+            }
         }
 
         public void SetPossibleSolution(List<int> values)
@@ -35,7 +75,10 @@ namespace Sudoku.Source.Game
             {
                 if (problem[i] == Constants.PlaceHolder)
                 {
-                    this.sudokuSquares[i].SudokuTextBox.Text = values[index++].ToString();
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        this.sudokuSquares[i].SudokuTextBox.Text = values[index++].ToString();
+                    }));
                 }
             }
         }
@@ -93,6 +136,61 @@ namespace Sudoku.Source.Game
             return 1 - totalRepeated / 243.00;
         }
 
+        public void Crossover(double[] p1, double[] p2, double[] c1, double[] c2, double crossPoint)
+        {
+            List<double> parent1 = new List<double>();
+            List<double> parent2 = new List<double>();
+            List<double> child1 = new List<double>();
+            List<double> child2 = new List<double>();
+            List<int> indexes;
+
+            int idx = 0;
+            for (int i = 0; i < Constants.BoardSize; i++)
+            {
+                if (this.problem[i] == Constants.PlaceHolder)
+                {
+                    parent1.Add(p1[idx]);
+                    parent2.Add(p2[idx++]);
+                }
+                else
+                {
+                    parent1.Add(this.problem[i]);
+                    parent2.Add(this.problem[i]);
+                }
+            }
+
+            int iCrossPoint = (int)(9 * crossPoint) + 1;
+            for (int i = 0; i < iCrossPoint; i++)
+            {
+                indexes = Grid.GetRegion(i);
+                foreach (int index in indexes)
+                {
+                    child1.Add(parent1[index]);
+                    child2.Add(parent2[index]);
+                }
+            }
+            for (int i = 5; i < 9; i++)
+            {
+                indexes = Grid.GetRegion(i);
+                foreach (int index in indexes)
+                {
+                    child1.Add(parent2[index]);
+                    child2.Add(parent1[index]);
+                }
+
+            }
+
+            idx = 0;
+            for (int i = 0; i < Constants.BoardSize; i++)
+            {
+                if (this.problem[i] == Constants.PlaceHolder)
+                {
+                    c1[idx] = child1[i];
+                    c2[idx++] = child2[i];
+                }
+            }
+        }
+
         private void getPossibleSolution()
         {
             this.attempt = new List<int>();
@@ -104,20 +202,22 @@ namespace Sudoku.Source.Game
             }
         }
 
-        private void drawSquare()
+        private void drawSquares()
         {
+            SudokuSquare sudokuSquare;
             int squareNumber = 0;
             for (int row = 0; row < 9; row++)
             {
                 for (int column = 0; column < 9; column++)
                 {
-                    SudokuSquare sudokuSquare = new SudokuSquare(this.problem[squareNumber], this.solution[squareNumber], row, column);
+                    sudokuSquare = new SudokuSquare(this.problem[squareNumber], this.solution[squareNumber], row, column);
                     sudokuSquare.SudokuTextBox.TextChanged += new EventHandler(TextChange);
                     this.sudokuSquares.Add(sudokuSquare);
                     this.Controls.Add(sudokuSquare);
                     squareNumber++;
                 }
             }
+            this.squaresDrawed = true;
         }
 
         private void TextChange(object sender, EventArgs e)

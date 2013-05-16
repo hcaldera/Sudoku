@@ -10,8 +10,8 @@ namespace Sudoku.Source.Game
         private static List<int> _solution = new List<int>();
         private static int _hints;
 
-        internal static List<int> Problem { get { return SudokuProblem._problem; } }
-        internal static List<int> Solution { get { return SudokuProblem._solution; } }
+        internal static List<int> Problem { get { return SudokuProblem._problem; } set { SudokuProblem._problem = value; } }
+        internal static List<int> Solution { get { return SudokuProblem._solution; } set { SudokuProblem._solution = value; } }
         internal static int Hints { get { return SudokuProblem._hints; } set { SudokuProblem._hints = value; } }
 
         internal static bool IsSolved(List<int> possibleSolution)
@@ -33,6 +33,7 @@ namespace Sudoku.Source.Game
         internal static void GenerateSudoku()
         {
             SolverContext context = SolverContext.GetContext();
+            context.ClearModel();
             Model model = context.CreateModel();
 
             List<Decision> decisionList = DecisionFactory.BuildDecisions(Grid.GetAllSquares());

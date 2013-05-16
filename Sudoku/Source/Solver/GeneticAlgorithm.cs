@@ -35,7 +35,8 @@ using System.Collections.Generic;
 namespace Sudoku.Source.Solver
 {
     public delegate double GAFitnessFunction(double[] values);
-    public delegate void GACrossoverFunction(double[] parent1, double[] parent2, double[] child1, double[] child2);
+    public delegate void GACrossoverFunction(double[] parent1, double[] parent2, double[] child1, double[] child2, double crossover);
+    public delegate void GASolutionFunction(bool finished);
 
     public class GeneticAlgorithm
     {
@@ -52,14 +53,17 @@ namespace Sudoku.Source.Solver
         private List<double> fitnessTable;
 
         private static Random random = new Random(DateTime.Now.Millisecond);
-        private static GAFitnessFunction getFitness;
-        private static GACrossoverFunction crossoverFunction;
+        private static GAFitnessFunction _getFitness;
+        internal static GACrossoverFunction crossoverFunction;
+        private static GASolutionFunction _solutionFunction;
 
-        public GAFitnessFunction FitnessFunction { get { return getFitness; } set { getFitness = value; } }
+        public GAFitnessFunction FitnessFunction { get { return _getFitness; } set { _getFitness = value; } }
         public GACrossoverFunction CrossoverFunction { get { return crossoverFunction; } set { crossoverFunction = value; } }
+        public GASolutionFunction SolutionFunction { get { return _solutionFunction; } set { _solutionFunction = value; } }
         public bool Elitism { get { return this._elitism; } set { this._elitism = value; } }
 
         public double[] BestGenome { get { return this.currentGeneration[this.populationSize - 1].Genes; } }
+        public double BestFitness { get { return this.currentGeneration[this.populationSize - 1].Fitness; } }
 
         public GeneticAlgorithm()
         {
@@ -102,7 +106,9 @@ namespace Sudoku.Source.Solver
                 }
                 this.createNextGeneration();
                 this.rankPopulation();
+                this.SolutionFunction(false);
             }
+            this.SolutionFunction(true);
         }
 
         private void createGenomes()
@@ -128,22 +134,13 @@ namespace Sudoku.Source.Solver
             {
                 genome = this.currentGeneration[this.populationSize - 1];
             }
-            for(int i=0;i<this.populationSize;i+=2)
+            for (int i = 0; (i < this.populationSize) && (this.BestFitness < 1.0); i += 2)
             {
                 pidx1 = this.rouletteSelection();
                 pidx2 = this.rouletteSelection();
                 parent1 = this.currentGeneration[pidx1];
                 parent2 = this.currentGeneration[pidx2];
-                if (this.CrossoverFunction == null)
-                {
-                    parent1.Crossover(parent2, out child1, out child2);
-                }
-                else
-                {
-                    child1 = new Genome(this.genomeSize);
-                    child2 = new Genome(this.genomeSize);
-                    this.CrossoverFunction(parent1.Genes, parent2.Genes, child1.Genes, child2.Genes);
-                }
+                parent1.Crossover(parent2, out child1, out child2);
                 child1.Mutate();
                 child2.Mutate();
                 this.nextGeneration.Add(child1);

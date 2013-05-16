@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.labelInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.buttonStartSolver = new System.Windows.Forms.ToolStripButton();
-            this.labelInfo = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonDefault = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonGenerate = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -47,10 +49,18 @@
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // labelInfo
+            // 
+            this.labelInfo.Name = "labelInfo";
+            this.labelInfo.Size = new System.Drawing.Size(0, 17);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.buttonStartSolver});
+            this.buttonStartSolver,
+            this.toolStripSeparator1,
+            this.toolStripButtonGenerate,
+            this.toolStripButtonDefault});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(385, 25);
@@ -60,17 +70,37 @@
             // buttonStartSolver
             // 
             this.buttonStartSolver.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonStartSolver.Image = ((System.Drawing.Image)(resources.GetObject("buttonStartSolver.Image")));
+            this.buttonStartSolver.Image = global::Sudoku.Properties.Resources.cog_go;
             this.buttonStartSolver.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonStartSolver.Name = "buttonStartSolver";
             this.buttonStartSolver.Size = new System.Drawing.Size(23, 22);
             this.buttonStartSolver.Text = "Start";
             this.buttonStartSolver.Click += new System.EventHandler(this.buttonStartSolver_Click);
             // 
-            // labelInfo
+            // toolStripSeparator1
             // 
-            this.labelInfo.Name = "labelInfo";
-            this.labelInfo.Size = new System.Drawing.Size(0, 17);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonDefault
+            // 
+            this.toolStripButtonDefault.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonDefault.Image = global::Sudoku.Properties.Resources.arrow_refresh_small;
+            this.toolStripButtonDefault.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDefault.Name = "toolStripButtonDefault";
+            this.toolStripButtonDefault.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonDefault.Text = "Default Problem";
+            this.toolStripButtonDefault.Click += new System.EventHandler(this.toolStripButtonDefault_Click);
+            // 
+            // toolStripButtonGenerate
+            // 
+            this.toolStripButtonGenerate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonGenerate.Image = global::Sudoku.Properties.Resources.application_view_tile;
+            this.toolStripButtonGenerate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonGenerate.Name = "toolStripButtonGenerate";
+            this.toolStripButtonGenerate.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonGenerate.Text = "Generate New Sudoku";
+            this.toolStripButtonGenerate.Click += new System.EventHandler(this.toolStripButtonGenerate_Click);
             // 
             // MainForm
             // 
@@ -86,6 +116,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Sudoku";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -101,5 +132,8 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton buttonStartSolver;
         private System.Windows.Forms.ToolStripStatusLabel labelInfo;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonDefault;
+        private System.Windows.Forms.ToolStripButton toolStripButtonGenerate;
     }
 }

@@ -90,6 +90,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Source\Game\SudokuGrid.resx">
       <DependentUpon>SudokuGrid.cs</DependentUpon>
@@ -113,7 +114,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\cog-go.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application-view-tile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow-refresh-small.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -4,27 +4,44 @@ using System.Windows.Forms;
 
 namespace Sudoku.Source.Game
 {
-    public partial class SudokuSquare : UserControl
+    internal partial class SudokuSquare : UserControl
     {
-        public int Row { get; set; }
-        public int Column { get; set; }
-        public int CorrectValue { get; set; }
+        internal int Row { get; set; }
+        internal int Column { get; set; }
+        internal int CorrectValue { get; set; }
         private int startSquarePositionX = Constants.StartSquareX;
         private int startSquarePositionY = Constants.StartSquareY;
 
-        public SudokuSquare()
+        internal SudokuSquare()
         {
             InitializeComponent();
         }
 
-        public SudokuSquare(int value, int correctVlue, int row, int column)
+        internal SudokuSquare(int value, int correctValue, int row, int column)
         {
             InitializeComponent();
             this.SudokuTextBox.Text = value.ToString();
-            this.CorrectValue = correctVlue;
+            this.CorrectValue = correctValue;
             this.Row = row;
             this.Column = column;
             this.drawSquare();
+        }
+
+        internal void ChangeSquare(int value, int correctValue)
+        {
+            this.SudokuTextBox.TextChanged -= SudokuTextBox_TextChanged;
+            this.SudokuTextBox.Text = value.ToString();
+            this.CorrectValue = correctValue;
+            if (this.SudokuTextBox.Text.Equals(Constants.PlaceHolder.ToString()))
+            {
+                this.SudokuTextBox.Enabled = true;
+                this.SudokuTextBox.Text = String.Empty;
+            }
+            else
+            {
+                this.SudokuTextBox.Enabled = false;
+            }
+            this.SudokuTextBox.TextChanged += SudokuTextBox_TextChanged;
         }
 
         private void drawSquare()
@@ -45,6 +62,8 @@ namespace Sudoku.Source.Game
             }
             this.SudokuTextBox.TextChanged += SudokuTextBox_TextChanged;
         }
+
+
 
         private void SudokuTextBox_TextChanged(object sender, EventArgs e)
         {
