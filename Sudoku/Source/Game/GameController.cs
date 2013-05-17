@@ -38,7 +38,7 @@ namespace Sudoku.Source.Game
             {
                 if (SudokuProblem.IsSolved(solution))
                 {
-                    MessageBox.Show(Sudoku.Source.Screens.MainForm.GetInstance(), "Congratulations!");
+                    //MessageBox.Show(Sudoku.Source.Screens.MainForm.GetInstance(), "Congratulations!");
                 }
             }
         }

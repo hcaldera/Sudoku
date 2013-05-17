@@ -36,7 +36,7 @@ namespace Sudoku.Source.Solver
 {
     public delegate double GAFitnessFunction(double[] values);
     public delegate void GACrossoverFunction(double[] parent1, double[] parent2, double[] child1, double[] child2, double crossover);
-    public delegate void GASolutionFunction(bool finished);
+    public delegate void GASolutionFunction(bool finished, int generation);
 
     public class GeneticAlgorithm
     {
@@ -86,6 +86,7 @@ namespace Sudoku.Source.Solver
 
         public void Start()
         {
+            int generation;
             if (this.FitnessFunction == null)
             {
                 throw new ArgumentException("Need to supply fitness function");
@@ -98,17 +99,32 @@ namespace Sudoku.Source.Solver
             Genome.MutationRate = this.mutationRate;
             this.createGenomes();
             this.rankPopulation();
-            for (int i = 0; i < this.generationSize; i++)
+            for (generation = 0; (generation < this.generationSize) && (this.BestFitness < 1.0); generation++)
             {
-                if ((i % 1000) == 0)
+                if ((generation % 1000) == 0)
                 {
                     random = new Random(DateTime.Now.Millisecond);
                 }
                 this.createNextGeneration();
                 this.rankPopulation();
-                this.SolutionFunction(false);
+                this.SolutionFunction(false, generation);
             }
-            this.SolutionFunction(true);
+            this.SolutionFunction(true, generation);
+            using (StreamWriter writer = new StreamWriter(Environment.CurrentDirectory + @"\Report.txt", false))
+            {
+                string line;
+                foreach (Genome genome in this.currentGeneration)
+                {
+                    writer.WriteLine(genome.Fitness);
+                    line = String.Empty;
+                    foreach (double value in genome.Genes)
+                    {
+                        line += String.Format("{0:#.####}", value) + "\t";
+                    }
+                    writer.WriteLine(line);
+                    writer.WriteLine();
+                }
+            }
         }
 
         private void createGenomes()
@@ -124,7 +140,8 @@ namespace Sudoku.Source.Solver
             int pidx1;
             int pidx2;
             this.nextGeneration.Clear();
-            Genome genome = null;
+            Genome genome1 = null;
+            Genome genome2 = null;
             Genome parent1;
             Genome parent2;
             Genome child1;
@@ -132,9 +149,10 @@ namespace Sudoku.Source.Solver
 
             if(this._elitism)
             {
-                genome = this.currentGeneration[this.populationSize - 1];
+                genome1 = this.currentGeneration[this.populationSize - 1];
+                genome2 = this.currentGeneration[this.populationSize - 2];
             }
-            for (int i = 0; (i < this.populationSize) && (this.BestFitness < 1.0); i += 2)
+            for (int i = 0; i < this.populationSize; i += 2)
             {
                 pidx1 = this.rouletteSelection();
                 pidx2 = this.rouletteSelection();
@@ -148,7 +166,8 @@ namespace Sudoku.Source.Solver
             }
             if (this._elitism)
             {
-                this.nextGeneration[0] = genome;
+                this.nextGeneration[0] = genome1;
+                this.nextGeneration[1] = genome2;
             }
             this.currentGeneration.Clear();
             this.currentGeneration = new List<Genome>(this.nextGeneration);

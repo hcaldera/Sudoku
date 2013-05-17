@@ -20,6 +20,7 @@ namespace Sudoku.Source.Screens
         private List<int> defaultProblem;
         private List<int> defaultSolution;
         private bool solving;
+        private int hints;
 
         private MainForm()
         {
@@ -52,7 +53,8 @@ namespace Sudoku.Source.Screens
                                                                2, 5, 3, 7, 6, 1, 9, 8, 4 });
             //this.sudokuGrid.GenerateSudoku(15);
             this.sudokuGrid.GenerateSudoku(this.defaultProblem, this.defaultSolution);
-            gA = new GeneticAlgorithm(0.90, 0.05, 22, 10000, 66);
+            this.hints = 26;
+            gA = new GeneticAlgorithm(0.90, 0.05, 22, 100000, 81 - this.hints);
             gA.FitnessFunction = this.getFitness;
             gA.SolutionFunction = this.solutionFound;
             gA.CrossoverFunction = this.sudokuGrid.Crossover;
@@ -90,7 +92,7 @@ namespace Sudoku.Source.Screens
             }
         }
 
-        private void solutionFound(bool finished)
+        private void solutionFound(bool finished, int generation)
         {
             double[] bestDoubleValues;
             List<int> bestIntegerValues = new List<int>();
@@ -104,6 +106,7 @@ namespace Sudoku.Source.Screens
             this.Invoke(new MethodInvoker(() =>
             {
                 this.labelInfo.Text = "Fitness: " + gA.BestFitness.ToString();
+                this.labelInfo.Text += " Generation: " + generation.ToString();
             }));
         }
 
@@ -111,7 +114,7 @@ namespace Sudoku.Source.Screens
         {
             if (!solving)
             {
-                this.sudokuGrid.GenerateSudoku(15);
+                this.sudokuGrid.GenerateSudoku(this.hints);
             }
         }
 

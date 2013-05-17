@@ -85,13 +85,61 @@ namespace Sudoku.Source.Game
 
         public double GetAttemptFitness(List<int> values)
         {
-            int totalRepeated;
-            List<int> indexes;
-            List<int> possibleValues = new List<int>(new int[9] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
-            List<int> possibleValuesTemp;
+            //int totalRepeated;
+            //List<int> indexes;
+            //List<int> possibleValues = new List<int>(new int[9] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+            //List<int> possibleValuesTemp;
+            //int j = 0;
+            //this.attempt = new List<int>();
+            //for (int i = 0; i < this.problem.Count; i++)
+            //{
+            //    if (problem[i] == Constants.PlaceHolder)
+            //    {
+            //        this.attempt.Add(values[j++]);
+            //    }
+            //    else
+            //    {
+            //        this.attempt.Add(this.problem[i]);
+            //    }
+            //}
+
+            //totalRepeated = 0;
+            //for (int i = 0; i < 9; i++)
+            //{
+            //    // Rows.
+            //    indexes = new List<int>(Grid.GetRow(i));
+            //    possibleValuesTemp = new List<int>(possibleValues);
+            //    foreach (int index in indexes)
+            //    {
+            //        possibleValuesTemp.Remove(attempt[index]);
+            //    }
+            //    totalRepeated += possibleValuesTemp.Count;
+            //    // Columns.
+            //    indexes = new List<int>(Grid.GetColumn(i));
+            //    possibleValuesTemp = new List<int>(possibleValues);
+            //    foreach (int index in indexes)
+            //    {
+            //        possibleValuesTemp.Remove(attempt[index]);
+            //    }
+            //    totalRepeated += possibleValuesTemp.Count;
+            //    // Regions.
+            //    indexes = new List<int>(Grid.GetRegion(i));
+            //    possibleValuesTemp = new List<int>(possibleValues);
+            //    foreach (int index in indexes)
+            //    {
+            //        possibleValuesTemp.Remove(attempt[index]);
+            //    }
+            //    totalRepeated += possibleValuesTemp.Count;
+            //}
+
+            //// Return fitness.
+            //return 1 - totalRepeated / 243.00;
+
+            double totalWrong = 0.0;
+
             int j = 0;
             this.attempt = new List<int>();
-            for (int i = 0; i < this.problem.Count; i++)
+            for (int i = 0; i < Constants.BoardSize; i++)
             {
                 if (problem[i] == Constants.PlaceHolder)
                 {
@@ -103,45 +151,22 @@ namespace Sudoku.Source.Game
                 }
             }
 
-            totalRepeated = 0;
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < Constants.BoardSize; i++)
             {
-                // Rows.
-                indexes = new List<int>(Grid.GetRow(i));
-                possibleValuesTemp = new List<int>(possibleValues);
-                foreach (int index in indexes)
+                if (this.attempt[i] != this.solution[i])
                 {
-                    possibleValuesTemp.Remove(attempt[index]);
+                    totalWrong++;
                 }
-                totalRepeated += possibleValuesTemp.Count;
-                // Columns.
-                indexes = new List<int>(Grid.GetColumn(i));
-                possibleValuesTemp = new List<int>(possibleValues);
-                foreach (int index in indexes)
-                {
-                    possibleValuesTemp.Remove(attempt[index]);
-                }
-                totalRepeated += possibleValuesTemp.Count;
-                // Regions.
-                indexes = new List<int>(Grid.GetRegion(i));
-                possibleValuesTemp = new List<int>(possibleValues);
-                foreach (int index in indexes)
-                {
-                    possibleValuesTemp.Remove(attempt[index]);
-                }
-                totalRepeated += possibleValuesTemp.Count;
             }
-
-            // Return fitness.
-            return 1 - totalRepeated / 243.00;
+            return 1 - (totalWrong / Constants.BoardSize);
         }
 
         public void Crossover(double[] p1, double[] p2, double[] c1, double[] c2, double crossPoint)
         {
-            List<double> parent1 = new List<double>();
-            List<double> parent2 = new List<double>();
-            List<double> child1 = new List<double>();
-            List<double> child2 = new List<double>();
+            double[] parent1 = new double[Constants.BoardSize];
+            double[] parent2 = new double[Constants.BoardSize];
+            double[] child1 = new double[Constants.BoardSize];
+            double[] child2 = new double[Constants.BoardSize];
             List<int> indexes;
 
             int idx = 0;
@@ -149,13 +174,8 @@ namespace Sudoku.Source.Game
             {
                 if (this.problem[i] == Constants.PlaceHolder)
                 {
-                    parent1.Add(p1[idx]);
-                    parent2.Add(p2[idx++]);
-                }
-                else
-                {
-                    parent1.Add(this.problem[i]);
-                    parent2.Add(this.problem[i]);
+                    parent1[i] = p1[idx];
+                    parent2[i] = p2[idx++];
                 }
             }
 
@@ -165,8 +185,8 @@ namespace Sudoku.Source.Game
                 indexes = Grid.GetRegion(i);
                 foreach (int index in indexes)
                 {
-                    child1.Add(parent1[index]);
-                    child2.Add(parent2[index]);
+                    child1[index] = parent1[index];
+                    child2[index] = parent2[index];
                 }
             }
             for (int i = 5; i < 9; i++)
@@ -174,8 +194,8 @@ namespace Sudoku.Source.Game
                 indexes = Grid.GetRegion(i);
                 foreach (int index in indexes)
                 {
-                    child1.Add(parent2[index]);
-                    child2.Add(parent1[index]);
+                    child1[index] = parent2[index];
+                    child2[index] = parent1[index];
                 }
 
             }
